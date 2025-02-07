@@ -1,5 +1,6 @@
 package com.scaler.userservice_rbac.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -13,15 +14,12 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "permissions")
+
 public class Permission extends BaseModel{
 
-    private String name; // A descriptive name for the permission, like "view_dashboard" or "edit_user"
-
-    private String resource; // The resource this permission applies to (e.g., "dashboard", "user", "order")
-
-    private String action; //  The action associated with this resource (e.g., "read", "write", "delete")
-
+    private String name;
     @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     public Permission(String name) {
@@ -29,6 +27,5 @@ public class Permission extends BaseModel{
     }
 
     public Permission() {
-
     }
 }
