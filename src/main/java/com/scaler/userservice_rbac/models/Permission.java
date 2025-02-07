@@ -23,4 +23,12 @@ public class Permission extends BaseModel{
 
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
+
+    public Permission(String name) {
+        this.name = name;
+    }
+
+    public Permission() {
+
+    }
 }
