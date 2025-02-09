@@ -9,7 +9,6 @@ import com.scaler.userservice_rbac.repository.RoleRepository;
 import com.scaler.userservice_rbac.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,6 +67,7 @@ public class UserService {
             System.out.println("User " + userId + " already has role " + roleName);
         }
     }
+
 }
 
 

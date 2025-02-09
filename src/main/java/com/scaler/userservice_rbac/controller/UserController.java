@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private UserService userService;
@@ -19,20 +19,20 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody UserDto userDTO) throws UserAlreadyExistInSystem, ResourceNotFoundException {
         User createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<User> getUserByUserId(@PathVariable Long id) throws ResourceNotFoundException {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{userId}/roles/{roleName}")
-    public ResponseEntity<String> assignRole(@PathVariable Long userId, @PathVariable String roleName) throws ResourceNotFoundException {
+    public ResponseEntity<String> assignRoleToUser(@PathVariable Long userId, @PathVariable String roleName) throws ResourceNotFoundException {
         userService.assignRoleToUser(userId, roleName);
         return ResponseEntity.ok("Role '" + roleName + "' assigned to User ID " + userId);
     }

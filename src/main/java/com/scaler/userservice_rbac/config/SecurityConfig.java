@@ -10,17 +10,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> {
-                            try {
-                                requests
-                                        .anyRequest().permitAll()
-                                        .and().cors().disable()
-                                        .csrf().disable();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                );
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/one", "/api/two").hasAnyRole("STAFF", "SUPERVISOR", "ADMIN")
+                        .requestMatchers("/api/three").hasAnyRole("SUPERVISOR", "ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN") // Admin has access to all APIs
+                        .anyRequest().authenticated()
+                )
+                .formLogin()
+                .and()
+                .logout();
 
         return http.build();
     }

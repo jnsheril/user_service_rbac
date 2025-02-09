@@ -16,30 +16,24 @@ import java.util.List;
 @RequestMapping("/user")
 
 public class RoleController {
-    private RoleRepository roleRepository;
     private RoleService roleService;
-
-    public RoleController(RoleRepository roleRepository,RoleService roleService){
-        this.roleRepository = roleRepository;
+    public RoleController(RoleService roleService){
         this.roleService = roleService;
     }
-
-    // Get all roles
+    /* Get all roles */
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
 
-
+    /* assign Multiple permission to roles */
     @PostMapping("/assign-permission")
     public ResponseEntity<String> assignPermissionToRole(@RequestBody AssignPermissionRequest request)
             throws UnauthorizedException, ResourceNotFoundException {
-
         if (request.getId() == null || request.getRoleName() == null || request.getPermissionName() == null) {
             return ResponseEntity.badRequest().body("Missing required fields!");
         }
-
         roleService.assignPermissionToRole(request.getId(), request.getRoleName(), request.getPermissionName());
         return ResponseEntity.ok("Permission assigned successfully!");
     }

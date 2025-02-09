@@ -1,4 +1,4 @@
-package com.scaler.userservice_rbac.intiazlizer;
+package com.scaler.userservice_rbac.intializer;
 
 import com.scaler.userservice_rbac.models.Role;
 import com.scaler.userservice_rbac.repository.RoleRepository;
@@ -20,10 +20,9 @@ public class RoleInitializer {
     }
     @PostConstruct
     public void initRoles() {
+        // set logger
         System.out.println("Initializing roles...");
-
         List<String> roles = List.of("ADMIN", "STAFF", "SUPERVISOR");
-
         for (String roleName : roles) {
             if (!roleRepository.existsByName(roleName)) { // Prevent duplicate entries
                 Role role = new Role(roleName);

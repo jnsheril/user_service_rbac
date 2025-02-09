@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "role")
+@Table(name = "roles")
 
 public class Role extends BaseModel {
 
@@ -23,6 +23,7 @@ public class Role extends BaseModel {
     public Role(String name) {
         this.name = name;  // Set the name here
     }
+
     public Role() {
     }
 

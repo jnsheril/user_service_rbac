@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class AssignPermissionRequest {
+    //userID
     private Long id;
     private String roleName;
     private String permissionName;

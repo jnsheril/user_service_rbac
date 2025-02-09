@@ -1,7 +1,6 @@
-package com.scaler.userservice_rbac.intiazlizer;
+package com.scaler.userservice_rbac.intializer;
 
 import com.scaler.userservice_rbac.models.Permission;
-import com.scaler.userservice_rbac.models.Role;
 import com.scaler.userservice_rbac.repository.PermissionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class PermissionIntializer {
     public void initRoles() {
         System.out.println("Initializing permission...");
 
-        List<String> permissions = List.of("read", "write", "view","manage","delete","add");
+        List<String> permissions = List.of("read","write","delete");
 
         for (String permissionName : permissions) {
             if (!permissionRepository.existsByName(permissionName)) { // Prevent duplicate entries
