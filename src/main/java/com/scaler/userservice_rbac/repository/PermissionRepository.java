@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
-public interface PermissionRepository extends JpaRepository<Permission,Long> {
-    Optional<Permission> findByName(String name);
+public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
+    // Find permission by resource and action
+    Optional<Permission> findByResourceAndAction(String resource, String action);
 
-
-    boolean existsByName(String permissionName);
+    // Check if a permission exists by resource and action
+    boolean existsByResourceAndAction(String resource, String action);
 }

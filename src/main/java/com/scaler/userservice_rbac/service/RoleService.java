@@ -9,11 +9,7 @@ import com.scaler.userservice_rbac.repository.PermissionRepository;
 import com.scaler.userservice_rbac.repository.RoleRepository;
 import com.scaler.userservice_rbac.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RoleService {
@@ -27,12 +23,14 @@ public class RoleService {
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
     }
-    //Get All Role
+    /* Get All Role */
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
-    //Assign Permission to Role - if its Admin
-    public void assignPermissionsToRole(Long adminId, String roleName, List<String> permissionNames)
+
+
+    /* Assign Permission to Role - if its Admin */
+    public void assignPermissionsToRole(Long adminId, String roleName, List<Map<String,String>> permissionList)
             throws ResourceNotFoundException, UnauthorizedException {
 
         // Find admin user
@@ -51,20 +49,22 @@ public class RoleService {
 
         // Fetch Permissions
         Set<Permission> permissionsToAdd = new HashSet<>();
-        for (String permissionName : permissionNames) {
-            Permission permission = permissionRepository.findByName(permissionName)
-                    .orElseThrow(() -> new ResourceNotFoundException("Permission " + permissionName + " not found"));
+        for (Map<String,String> permissionMap : permissionList) {
+                String resource = permissionMap.get("resource");
+                String action = permissionMap.get("action");
+            Permission permission = permissionRepository.findByResourceAndAction(resource, action)
+                    .orElseThrow(() -> new ResourceNotFoundException("Permission not found for resource: " + resource + " and action: " + action));
             permissionsToAdd.add(permission);
         }
 
-        // Assign only new permissions
-        if (role.getPermissions().addAll(permissionsToAdd)) {
-            roleRepository.save(role);
-            System.out.println("Permissions " + permissionNames + " assigned to role " + roleName);
-        } else {
-            System.out.println("Role " + roleName + " already has permissions " + permissionNames);
-        }
-    }
+      // Assign only new permissions
+       if (role.getPermissions().addAll(permissionsToAdd)) {
+          roleRepository.save(role);
+          System.out.println("Permissions " + permissionList + " assigned to role " + roleName);
+       } else {
+          System.out.println("Role " + roleName + " already has permissions " + permissionList);
+       }
+   }
 }
 
 

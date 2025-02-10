@@ -14,17 +14,24 @@ import java.util.Set;
 @Entity
 @Table(name = "permissions")
 
-public class Permission extends BaseModel{
-    private String name;
-    private String resources;
-    private String actions;
+public class Permission extends BaseModel {
+    private String resource; // e.g., "USER", "ORDER", "PRODUCT"
+    private String action;   // e.g., "READ", "WRITE", "DELETE"
+
     @ManyToMany(mappedBy = "permissions")
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
-    public Permission(String name) {
-        this.name = name;
+    public Permission(String resource, String action) {
+        this.resource = resource;
+        this.action = action;
     }
+
     public Permission() {
+
+    }
+
+    public String getAuthority() {
+        return this.resource + "_" + this.action; // e.g., "USER_READ"
     }
 }

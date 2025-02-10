@@ -24,14 +24,14 @@ public class RoleController {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
-    /* assign Multiple permission to roles */
+//    /* assign Multiple permission to roles */
     @PostMapping("/assign-permissions")
     public ResponseEntity<String> assignPermissionsToRole(@RequestBody AssignPermissionsRequest request)
             throws UnauthorizedException, ResourceNotFoundException {
-        if (request.getId() == null || request.getRoleName() == null || request.getPermissionNames() == null || request.getPermissionNames().isEmpty()) {
+        if (request.getUserId() == null || request.getRoleName() == null || request.getPermissions() == null || request.getPermissions().isEmpty()) {
             return ResponseEntity.badRequest().body("Missing required fields!");
         }
-        roleService.assignPermissionsToRole(request.getId(), request.getRoleName(), request.getPermissionNames());
+        roleService.assignPermissionsToRole(request.getUserId(), request.getRoleName(), request.getPermissions());
         return ResponseEntity.ok("Permissions assigned successfully!");
     }
 }
