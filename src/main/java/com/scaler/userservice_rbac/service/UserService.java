@@ -59,16 +59,13 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Set<Role> rolesToAssign = new HashSet<>();
-
         for (String roleName : roleNames) {
             Role role = roleRepository.findByName(roleName)
                     .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
             rolesToAssign.add(role);
         }
-
         // Add only new roles to avoid unnecessary DB operations
         boolean isUpdated = user.getRoles().addAll(rolesToAssign);
-
         if (isUpdated) {
             userRepository.save(user);
             System.out.println("Roles " + roleNames + " assigned to user " + userId);

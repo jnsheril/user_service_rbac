@@ -1,12 +1,10 @@
 package com.scaler.userservice_rbac.controller;
 
-import com.scaler.userservice_rbac.dto.AssignPermissionRequest;
+import com.scaler.userservice_rbac.dto.AssignPermissionsRequest;
 import com.scaler.userservice_rbac.exceptions.ResourceNotFoundException;
 import com.scaler.userservice_rbac.exceptions.UnauthorizedException;
 import com.scaler.userservice_rbac.models.Role;
-import com.scaler.userservice_rbac.repository.RoleRepository;
 import com.scaler.userservice_rbac.service.RoleService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,16 +24,15 @@ public class RoleController {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
-
     /* assign Multiple permission to roles */
-    @PostMapping("/assign-permission")
-    public ResponseEntity<String> assignPermissionToRole(@RequestBody AssignPermissionRequest request)
+    @PostMapping("/assign-permissions")
+    public ResponseEntity<String> assignPermissionsToRole(@RequestBody AssignPermissionsRequest request)
             throws UnauthorizedException, ResourceNotFoundException {
-        if (request.getId() == null || request.getRoleName() == null || request.getPermissionName() == null) {
+        if (request.getId() == null || request.getRoleName() == null || request.getPermissionNames() == null || request.getPermissionNames().isEmpty()) {
             return ResponseEntity.badRequest().body("Missing required fields!");
         }
-        roleService.assignPermissionToRole(request.getId(), request.getRoleName(), request.getPermissionName());
-        return ResponseEntity.ok("Permission assigned successfully!");
+        roleService.assignPermissionsToRole(request.getId(), request.getRoleName(), request.getPermissionNames());
+        return ResponseEntity.ok("Permissions assigned successfully!");
     }
 }
 

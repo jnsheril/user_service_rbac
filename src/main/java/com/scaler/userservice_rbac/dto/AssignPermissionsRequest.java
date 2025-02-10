@@ -4,14 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 
-public class AssignPermissionRequest {
+public class AssignPermissionsRequest {
     //userID
     private Long id;
     private String roleName;
-    private String permissionName;
+    private List<String> permissionNames;
 }
 
