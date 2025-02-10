@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/roles")
 
 public class RoleController {
     private RoleService roleService;
@@ -21,7 +21,7 @@ public class RoleController {
         this.roleService = roleService;
     }
     /* Get all roles */
-    @GetMapping("/roles")
+    @GetMapping("/")
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);

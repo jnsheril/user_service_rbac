@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -31,10 +33,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{userId}/roles/{roleName}")
-    public ResponseEntity<String> assignRoleToUser(@PathVariable Long userId, @PathVariable String roleName) throws ResourceNotFoundException {
-        userService.assignRoleToUser(userId, roleName);
-        return ResponseEntity.ok("Role '" + roleName + "' assigned to User ID " + userId);
+    @PutMapping("/{userId}/roles/")
+    public ResponseEntity<String> assignRolesToUser(@PathVariable Long userId, @RequestBody List<String> roleNames) throws ResourceNotFoundException {
+        userService.assignRolesToUser(userId, roleNames);
+        return ResponseEntity.ok("Role '" + roleNames + "' assigned to User ID " + userId);
     }
 }
 

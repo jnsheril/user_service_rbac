@@ -1,26 +1,26 @@
 package com.scaler.userservice_rbac.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
 
-@Component
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/one", "/api/two").hasAnyRole("STAFF", "SUPERVISOR", "ADMIN")
-                        .requestMatchers("/api/three").hasAnyRole("SUPERVISOR", "ADMIN")
-                        .requestMatchers("/api/**").hasRole("ADMIN") // Admin has access to all APIs
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Allow access to all endpoints
                 )
-                .formLogin()
-                .and()
-                .logout();
+                .httpBasic().disable() // Disable basic authentication if not needed
+                .formLogin().disable(); // Disable form login if not needed
 
         return http.build();
     }
-
 }

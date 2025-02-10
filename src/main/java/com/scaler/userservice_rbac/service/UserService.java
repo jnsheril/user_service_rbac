@@ -10,6 +10,7 @@ import com.scaler.userservice_rbac.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,7 +28,7 @@ public class UserService {
     }
 
     public User createUser(UserDto userDto) throws UserAlreadyExistInSystem, ResourceNotFoundException {
-        if(userRepository.findByUsername(userDto.getUsername()).isPresent()){
+        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
             throw new UserAlreadyExistInSystem("User Exist");
         }
         User user = new User();
@@ -53,21 +54,28 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public void assignRoleToUser(Long userId, String roleName) throws ResourceNotFoundException {
+    public void assignRolesToUser(Long userId, List<String> roleNames) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
-        //checking avoids unnecessary DB operations
-        if (user.getRoles().add(role)) {
+        Set<Role> rolesToAssign = new HashSet<>();
+
+        for (String roleName : roleNames) {
+            Role role = roleRepository.findByName(roleName)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
+            rolesToAssign.add(role);
+        }
+
+        // Add only new roles to avoid unnecessary DB operations
+        boolean isUpdated = user.getRoles().addAll(rolesToAssign);
+
+        if (isUpdated) {
             userRepository.save(user);
-            System.out.println("Role " + roleName + " assigned to user " + userId);
+            System.out.println("Roles " + roleNames + " assigned to user " + userId);
         } else {
-            System.out.println("User " + userId + " already has role " + roleName);
+            System.out.println("User " + userId + " already has roles " + roleNames);
         }
     }
-
 }
 
 
