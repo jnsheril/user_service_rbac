@@ -1,5 +1,7 @@
 package com.scaler.userservice_rbac.service;
 
+import com.scaler.userservice_rbac.dto.LoginRequestDto;
+import com.scaler.userservice_rbac.dto.LoginResponseDto;
 import com.scaler.userservice_rbac.dto.UserDto;
 import com.scaler.userservice_rbac.exceptions.ResourceNotFoundException;
 import com.scaler.userservice_rbac.exceptions.UserAlreadyExistInSystem;
@@ -7,6 +9,9 @@ import com.scaler.userservice_rbac.models.Role;
 import com.scaler.userservice_rbac.models.User;
 import com.scaler.userservice_rbac.repository.RoleRepository;
 import com.scaler.userservice_rbac.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
@@ -19,12 +24,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private JWTService jwtService;
 
     // Constructor Injection
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       AuthenticationManager authenticationManager,
+                       JWTService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public User createUser(UserDto userDto) throws UserAlreadyExistInSystem, ResourceNotFoundException {
@@ -72,6 +84,15 @@ public class UserService {
         } else {
             System.out.println("User " + userId + " already has roles " + roleNames);
         }
+    }
+
+    public String verify(LoginRequestDto loginRequestDto) {
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(),loginRequestDto.getPassword()));
+        if(authentication.isAuthenticated()){
+            return jwtService.generateToken(loginRequestDto.getUsername());
+        }
+        return "false";
     }
 }
 
