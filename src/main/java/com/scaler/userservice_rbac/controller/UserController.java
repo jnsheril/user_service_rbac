@@ -21,21 +21,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody UserDto userDTO) throws UserAlreadyExistInSystem, ResourceNotFoundException {
         User createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<User> getUserByUserId(@PathVariable Long id) throws ResourceNotFoundException {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{userId}/roles/")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> assignRolesToUser(@PathVariable Long userId, @RequestBody List<String> roleNames) throws ResourceNotFoundException {
         userService.assignRolesToUser(userId, roleNames);
         return ResponseEntity.ok("Role '" + roleNames + "' assigned to User ID " + userId);

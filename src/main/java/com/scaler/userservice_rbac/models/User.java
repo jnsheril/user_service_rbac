@@ -1,6 +1,7 @@
 package com.scaler.userservice_rbac.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class User extends BaseModel {
     private String username;
     private String email;
     private String password;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
 }
