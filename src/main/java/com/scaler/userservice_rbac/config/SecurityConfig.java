@@ -39,11 +39,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests)->requests
                 .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/users/**").hasRole("ADMIN")
+                .requestMatchers("/users/{id}").hasAnyRole("ADMIN","STAFF")
                 .requestMatchers("/users/{userId}/roles/").hasRole("ADMIN")
                 .requestMatchers("/roles/assign-permissions").hasRole("ADMIN")
-                .requestMatchers("/roles/").hasRole("ADMIN")
-                .requestMatchers("/permissions/").hasRole("ADMIN")
+                .requestMatchers("/roles/").hasAnyRole("ADMIN","STAFF")
+                .requestMatchers("/permissions/").hasAnyRole("ADMIN","STAFF")
                 .requestMatchers("/permissions/role/{roleName}").hasRole("ADMIN")
         ).httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
