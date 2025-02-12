@@ -33,16 +33,6 @@ public class RoleService {
     public void assignPermissionsToRole(Long adminId, String roleName, List<Map<String,String>> permissionList)
             throws ResourceNotFoundException, UnauthorizedException {
 
-        // Find admin user
-        User adminUser = userRepository.findById(adminId)
-                .orElseThrow(() -> new ResourceNotFoundException("Admin user not found"));
-
-        // Check if user is Admin
-        boolean isAdmin = adminUser.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN"));
-        if (!isAdmin) {
-            throw new UnauthorizedException("Only Admin can assign permissions to roles");
-        }
-
         // Fetch Role
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
