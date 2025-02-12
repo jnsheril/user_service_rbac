@@ -1,5 +1,6 @@
 package com.scaler.userservice_rbac.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class User extends BaseModel {
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();

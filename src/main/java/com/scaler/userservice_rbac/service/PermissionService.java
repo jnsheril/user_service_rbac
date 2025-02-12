@@ -14,6 +14,7 @@ import java.util.List;
 public class PermissionService {
     private PermissionRepository permissionRepository;
     private RoleRepository roleRepository;
+
     public PermissionService(PermissionRepository permissionRepository,RoleRepository roleRepository){
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
