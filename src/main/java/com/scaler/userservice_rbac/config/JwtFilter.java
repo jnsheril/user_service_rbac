@@ -30,26 +30,26 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization"); // ✅ Authorization header will contain Token
+        String authHeader = request.getHeader("Authorization"); //Authorization header will contain Token
         String token = null;
         String username = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7); // ✅ Extract token after "Bearer "
-            username = jwtService.extractUserName(token); // ✅ Extract username from token
+            token = authHeader.substring(7); //Extract token after "Bearer "
+            username = jwtService.extractUserName(token); //Extract username from token
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // ✅ Load user details using username
+            //Load user details using username
             UserDetails userDetails = context.getBean(MyUserDetailService.class).loadUserByUsername(username);
 
-            // ✅ Validate token
+            //Validate token
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken); // ✅ Set Authentication in SecurityContext
+                SecurityContextHolder.getContext().setAuthentication(authToken); //Set Authentication in SecurityContext
             } else {
                 System.out.println(" JWT validation failed");
             }

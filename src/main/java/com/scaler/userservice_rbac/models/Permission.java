@@ -15,8 +15,8 @@ import java.util.Set;
 @Table(name = "permissions")
 
 public class Permission extends BaseModel {
-    private String resource; // e.g., "USER", "ORDER", "PRODUCT"
-    private String action;   // e.g., "READ", "WRITE", "DELETE"
+    private String resource;
+    private String action;
 
     @ManyToMany(mappedBy = "permissions")
     @JsonIgnore
@@ -32,6 +32,6 @@ public class Permission extends BaseModel {
     }
 
     public String getAuthority() {
-        return this.resource + "_" + this.action; // e.g., "USER_READ"
+        return this.resource + "_" + this.action;
     }
 }

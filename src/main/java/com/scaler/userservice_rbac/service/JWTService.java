@@ -17,9 +17,9 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private final String secretKey = "YourSuperSecretKeyThatIsAtLeast32CharactersLong"; // ✅ FIXED: Use a constant key
+    private final String secretKey = "YourSuperSecretKeyThatIsAtLeast32CharactersLong"; //
 
-    private final SecretKey signingKey; // ✅ FIXED: Store decoded key only once
+    private final SecretKey signingKey;
 
     public JWTService() {
         byte[] keyBytes = Decoders.BASE64.decode(Base64.getEncoder().encodeToString(secretKey.getBytes()));
@@ -48,7 +48,7 @@ public class JWTService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(signingKey) // ✅ FIXED: Use `parserBuilder()`
+                .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
